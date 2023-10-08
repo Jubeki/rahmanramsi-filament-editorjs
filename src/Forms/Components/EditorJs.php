@@ -17,7 +17,6 @@ class EditorJs extends Field implements HasFileAttachmentsContract
 
   protected array | Closure $tools = [
     'header',
-    'image',
     'delimiter',
     'list',
     'underline',

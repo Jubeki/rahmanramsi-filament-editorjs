@@ -1,5 +1,4 @@
 import EditorJS from "@editorjs/editorjs";
-import ImageTool from "@editorjs/image";
 import List from "@editorjs/list";
 import Header from "@editorjs/header";
 import Underline from "@editorjs/underline";
@@ -19,31 +18,6 @@ document.addEventListener("alpine:init", () => {
       instance: null,
       state: state,
       tools: tools,
-      uploadImage: function (blob) {
-        return new Promise((resolve) => {
-          this.$wire.upload(
-            `componentFileAttachments.${statePath}`,
-            blob,
-            (uploadedFilename) => {
-              this.$wire
-                .getComponentFileAttachmentUrl(statePath)
-                .then((url) => {
-                  if (!url) {
-                    return resolve({
-                      success: 0,
-                    });
-                  }
-                  return resolve({
-                    success: 1,
-                    file: {
-                      url: url,
-                    },
-                  });
-                });
-            }
-          );
-        });
-      },
       init() {
         let enabledTools = {};
 
@@ -51,23 +25,11 @@ document.addEventListener("alpine:init", () => {
           enabledTools.header = {
             class: Header,
             inlineToolbar: true,
-          };
-        }
-        if (this.tools.includes("image")) {
-          enabledTools.image = {
-            class: ImageTool,
             config: {
-              uploader: {
-                uploadByFile: (file) => this.uploadImage(file),
-                uploadByUrl: (url) => {
-                  return new Promise(async (resolve) => {
-                    return fetch(url)
-                      .then((res) => res.blob())
-                      .then((blob) => resolve(this.uploadImage(blob)));
-                  });
-                },
-              },
-            },
+              placeholder: 'Gib eine Teil-Überschrift ein.',
+              levels: [3, 4],
+              defaultLevel: 3
+            }
           };
         }
         if (this.tools.includes("delimiter"))
